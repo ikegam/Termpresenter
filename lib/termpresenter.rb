@@ -4,19 +4,35 @@ require 'aastring.rb'
 require 'curses'
 
 class Tmptr
+  attr_writer :lines
+  attr_reader :current_index
+  attr_writer :infobar_proc
 
   def initialize(content)
     @current_index = 0
     @content = content
+    @lines = 4
+    @font_size = 12
+    @infobar_proc = Proc.new{|tmptr, content| infobar("#{tmptr.current_index + 1}/#{content.pages}") }
     Curses.init_screen
     Curses.noecho
     @term = Curses.stdscr
-    setup
   end
 
   def setup(h=?|, w=?-, s=?*)
+    unless @real_lines == Curses.lines and @real_cols == Curses.cols
+      @real_lines = Curses.lines
+      @real_cols = Curses.cols
+      @font_size = calc_fontsize
+    end
     @term.box(h, w, s)
+    @infobar_proc.call(self, @content)
     @term.refresh
+  end
+
+  def infobar(str)
+    @term.setpos(0, 0)
+    @term.addstr(str)
   end
 
   def reflesh()
@@ -28,7 +44,8 @@ class Tmptr
     @current_index = index
     @term.clear
     setup
-    box_addstr(@content.get_content(index).to_aa, 2, 2)
+
+    box_addstr(@content.get_content(index).to_aa(@font_size), 2, 2)
     @term.setpos(0, 0)
     @term.refresh
   end
@@ -37,7 +54,7 @@ class Tmptr
     i = y
     str.split("\n").each{|line|
       @term.setpos(i, x)
-      @term.addstr(line)
+      @term.addstr(line[0, @real_cols-5])
       i = i + 1
     }
   end
@@ -72,6 +89,16 @@ class Tmptr
     @term.getstr
     sub.close
     reflesh
+  end
+
+  def calc_fontsize
+    need_lines = 0
+    ret = 6
+    while  need_lines < @real_lines
+      need_lines = ("あ\n" * @lines.to_i).to_aa(ret).split(/\n/).size + 9
+      ret = ret + 1
+    end
+    return ret
   end
 
 end

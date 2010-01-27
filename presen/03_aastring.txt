@@ -1,2 +1,0 @@
-
-Stringに.to_aa
