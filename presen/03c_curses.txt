@@ -1,3 +1,4 @@
-cursesも標準
+curses
+-標準
 
-Rubyって楽チン
+-Rubyって楽チン

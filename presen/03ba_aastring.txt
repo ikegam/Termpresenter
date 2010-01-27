@@ -1,0 +1,4 @@
+Pango/Ruby
+-CairoからPNG
+-PNGからPBM
+-PBMからASCII
