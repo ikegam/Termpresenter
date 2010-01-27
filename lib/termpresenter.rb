@@ -3,7 +3,7 @@
 require 'aastring.rb'
 require 'curses'
 
-class Tmptr
+class Tmptr_window_core
   attr_writer :lines
   attr_reader :current_index
   attr_writer :infobar_proc
@@ -13,18 +13,11 @@ class Tmptr
     @content = content
     @lines = 4
     @font_size = 12
-    @infobar_proc = Proc.new{|tmptr, content| infobar("#{tmptr.current_index + 1}/#{content.pages}") }
-    Curses.init_screen
-    Curses.noecho
-    @term = Curses.stdscr
+    @infobar_proc = Proc.new{|tmptr, content| tmptrinfobar("#{tmptr.current_index + 1}/#{content.pages}") }
   end
 
   def setup(h=?|, w=?-, s=?*)
-    unless @real_lines == Curses.lines and @real_cols == Curses.cols
-      @real_lines = Curses.lines
-      @real_cols = Curses.cols
-      @font_size = calc_fontsize
-    end
+    @term.clear
     @term.box(h, w, s)
     @infobar_proc.call(self, @content)
     @term.refresh
@@ -74,22 +67,6 @@ class Tmptr
     end
   end
 
-  def execute_command()
-    sub = Tmptr_command_window.new(@term, 3, 30, 4, 4)
-    Curses.echo
-    @term.setpos(5, 5)
-    command = @term.getstr
-    Curses.noecho
-    sub.close
-    reflesh
-    sub = Tmptr_result_window.new(@term, 30, 30, 4, 4)
-    @term.setpos(5, 5)
-    ret = %x{#{command.chomp} | cut -b '1-28'} + "\n enter key"
-    box_addstr(ret, 5, 5)
-    @term.getstr
-    sub.close
-    reflesh
-  end
 
   def calc_fontsize
     need_lines = 0
@@ -103,22 +80,58 @@ class Tmptr
 
 end
 
-class Tmptr_sub_window_core
-
-  def initialize(parent, height, width, y, x)
-    @parent = parent
-    @subwindow = parent.subwin(height, width, y, x)
-    setup
+class Tmptr < Tmptr_window_core
+  def initialize(content)
+    super
+    Curses.init_screen
+    Curses.noecho
+    @term = Curses.stdscr
   end
 
   def setup(h=?|, w=?-, s=?*)
-    @subwindow.clear
-    @subwindow.box(h, w, s)
-    @subwindow.refresh
+    super
+    unless @real_lines == Curses.lines and @real_cols == Curses.cols
+      @real_lines = Curses.lines
+      @real_cols = Curses.cols
+      @font_size = calc_fontsize
+    end
+  end
+
+  def execute_command()
+    sub = Tmptr_command_window.new(@term, 3, 30, 4, 4)
+    sub.setup
+    Curses.echo
+    @term.setpos(5, 6)
+    command = @term.getstr
+    Curses.noecho
+    sub.close
+    reflesh
+    sub = Tmptr_result_window.new(@term, 30, 30, 4, 4)
+    sub.setup
+    @term.setpos(5, 5)
+    ret = %x{#{command.chomp} | cut -b '1-28'}.split(/\n/)[0,26].join("\n") + "\n enter key"
+    box_addstr(ret, 5, 5)
+    @term.getstr
+    sub.close
+    reflesh
+  end
+
+end
+
+
+class Tmptr_sub_window_core < Tmptr_window_core
+
+  attr_accessor :lines
+  attr_accessor :cols
+
+  def initialize(parent, height, width, y, x)
+    @infobar_proc = Proc.new{}
+    @parent = parent
+    @term = parent.subwin(height, width, y, x)
   end
 
   def close()
-    @subwindow.close
+    @term.close
   end
 
 end
