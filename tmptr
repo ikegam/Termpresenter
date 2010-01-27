@@ -1,0 +1,36 @@
+#!/usr/bin/ruby
+
+ENV['LANG'] = "C"
+$:.push("./lib")
+
+require 'termpresenter_file_loader.rb'
+require 'termpresenter.rb'
+
+require 'optparse'
+
+dir="./presen"
+ARGV.options {|opt|
+  opt.on('-d WORKING DIRECTORY'){|v| dir=v }
+  opt.parse!
+}
+
+content = Tmptr_content.new_bydir(dir)
+tmptr = Tmptr.new(content)
+
+tmptr.start{|term, key|
+  case key
+  when 99  # c
+    tmptr.execute_command
+  when 110 # n
+    tmptr.next
+  when 112 # p
+    tmptr.prev
+  when 114 # r
+    tmptr.reflesh
+  when 113 # q
+    exit 0
+  else
+    p key if $DEBUG
+  end
+}
+

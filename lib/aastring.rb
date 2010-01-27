@@ -21,6 +21,7 @@ class String
       temp = Tempfile.new("termpresenter", "/tmp")
       surface.write_to_png(temp.path)
       ret = ret + %x{cat #{temp.path}| pngtopnm | ppmtopgm | pgmtopbm | pbmtoascii}
+      temp.close
     }
     return ret
   end

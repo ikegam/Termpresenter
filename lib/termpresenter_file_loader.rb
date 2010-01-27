@@ -14,12 +14,10 @@ class Tmptr_content
   end
 
   def get_content(index)
-    index = (index % @pages)
     return open(@files[index]).read
   end
 
   def get_file_path(index)
-    index = (index % @pages)
     return @files[index]
   end
 
