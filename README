@@ -1,0 +1,10 @@
+* TermPresenter
+
+**概要
+-ターミナル上で動くプレゼンソフト
+
+**依存
+-libpango1-ruby1.8
+-cut
+-netpbm
+
