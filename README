@@ -1,10 +1,14 @@
 * TermPresenter
 
-**概要
--ターミナル上で動くプレゼンソフト
+**abstract
+-This is "presentation software" that works on terminal emulator. ssh, telnet, onX, ttyS.. and more!
 
-**依存
+**depend
 -libpango1-ruby1.8
 -cut
 -netpbm
+
+**dir
+-presen/
+-lib/
 
