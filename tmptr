@@ -10,7 +10,8 @@ require 'optparse'
 
 dir="./presen"
 ARGV.options {|opt|
-  opt.on('-d WORKING DIRECTORY'){|v| dir=v }
+  opt.on('-d Presentation Directory'){|v| dir=v }
+  opt.on('-v'){|v| puts "TermPresenter v1.0"; exit 0}
   opt.parse!
 }
 
@@ -18,8 +19,11 @@ runtime = Time.now
 
 content = Tmptr_content.new_bydir(dir)
 tmptr = Tmptr.new(content)
+
 tmptr.lines = 4
-tmptr.infobar_proc = Proc.new{|tmptr, content| tmptr.infobar("#{tmptr.current_index + 1}/#{content.pages} #{(Time.now - runtime).to_i}Sec") } 
+tmptr.infobar_proc = Proc.new{|tmptr, content|
+  tmptr.infobar("#{tmptr.current_index + 1}/#{content.pages} #{(Time.now - runtime).to_i}Sec")
+}
 
 tmptr.start{|term, key|
   case key
