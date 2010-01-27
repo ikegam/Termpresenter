@@ -1,2 +1,4 @@
-
-Stringに.to_aa
+Stringへの拡張
+  "hoge".to_aa
+   hoge
+こんなカンジ(?)

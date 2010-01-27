@@ -1,1 +1,3 @@
-cursesを使用！
+cursesも標準
+
+Rubyって楽チン
