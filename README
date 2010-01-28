@@ -2,12 +2,17 @@
 
 **abstract
 -This software is "presentation software" that works on terminal. ssh, telnet, onX, ttyS.. and more!
--Ruby language for the first time.
 
 **depend
 -libpango1-ruby1.8
 -cut
 -netpbm
+
+**installation and start
+ $ git clone git://github.com/ikegam/Termpresenter.git
+ $ cd Termpresenter/
+ $ chmod +x ./tmptr
+ $ ./tmptr
 
 **dir
 -presen/
