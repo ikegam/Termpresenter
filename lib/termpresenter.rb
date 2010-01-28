@@ -12,6 +12,8 @@ class Tmptr_window_core
     @current_index = 0
     @content = content
     @lines = 4
+    @real_lines = 0
+    @real_cols = 0
     @font_size = 12
     @infobar_proc = Proc.new{|tmptr, content| tmptrinfobar("#{tmptr.current_index + 1}/#{content.pages}") }
   end
@@ -30,6 +32,11 @@ class Tmptr_window_core
 
   def reflesh()
     view(@current_index)
+  end
+
+  def reload(content)
+    @content = content
+    reflesh
   end
 
   def view(index)
