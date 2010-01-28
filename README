@@ -1,0 +1,20 @@
+* TermPresenter
+
+**概要
+-TermPresenterは端末上で動作するプレゼンソフトです。日本語に対応していない端末や端末エミュレータ上であっても日本語が表示でき、sshやtelnetやシリアルコンソール経由でも使用が可能です。その為古いハードウェア資産が活用でき地球環境に優しく、また見た目が非常に硬派であるため、その2点に重点を置いてプレゼンテーションを行いたい方に最適です。またXに依存せずにプレゼンテーションが行える点についても注目して頂きたく思います。
+
+**依存
+-libpango1-ruby1.8
+-cut
+-netpbm
+
+**インストールと起動
+Debianの場合
+ # aptitude install coreutils ruby1.8 libpango1-ruby1.8 netpbm git-core
+ $ git clone git://github.com/ikegam/Termpresenter.git
+ $ cd Termpresenter/
+ $ chmod +x ./tmptr
+ $ ./tmptr
+
+**コツ
+端末にセットするフォントはなるべく小さく、又端末の行間はなるべく少なめに設定した上で使用してください。
