@@ -45,7 +45,7 @@ end
 
 if $0 == __FILE__
   content = Tmptr_content.new_bydir("../presen")
-  p content.get_content(0)
+  p content.get_page(0)
   p content.pages
 end
 
