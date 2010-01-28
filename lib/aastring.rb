@@ -2,8 +2,14 @@
 # このふぁいるはうーてーえふはちです。
 
 class String
+  attr_writer :aafont
   require 'pango'
   require 'tempfile'
+
+  def initialize
+    super
+    @aafont = "IPAGothic"
+  end
 
   def to_aa(height=12)
     ret = ""
@@ -16,7 +22,7 @@ class String
       context = Cairo::Context.new(surface)
       layout = context.create_pango_layout
       layout.text = line
-      layout.font_description = "Sans #{height}"
+      layout.font_description = "#{@aafont} #{height}"
       layout.width = 400 * Pango::SCALE
       context.show_pango_layout(layout)
       temp = Tempfile.new("termpresenter", "/tmp")
@@ -26,6 +32,7 @@ class String
     }
     return ret
   end
+
 end
 
 if $0 == __FILE__

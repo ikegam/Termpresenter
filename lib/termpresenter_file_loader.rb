@@ -1,5 +1,24 @@
 #!/usr/bin/ruby
 
+class Tmptr_raw_page
+
+  require 'mime/types'
+
+  attr_reader :content
+  attr_reader :type
+
+  def initialize(file)
+    @type = MIME::Types.type_for(file)[0].to_s.to_sym
+    case @type
+    when :"text/plane"
+      @content = open(file).read
+    else
+      @content = open(file, "rb").read
+    end
+  end
+
+end
+
 class Tmptr_content
   attr_reader :pages
 
@@ -13,8 +32,8 @@ class Tmptr_content
     @pages = files.size
   end
 
-  def get_content(index)
-    return open(@files[index]).read
+  def get_page(index)
+    return Tmptr_raw_page.new(@files[index])
   end
 
   def get_file_path(index)
@@ -29,3 +48,4 @@ if $0 == __FILE__
   p content.get_content(0)
   p content.pages
 end
+
