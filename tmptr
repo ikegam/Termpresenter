@@ -37,6 +37,9 @@ tmptr.start{|term, key|
     tmptr.reflesh
   when 108 # l
     tmptr.reload(Tmptr_content.new_bydir(dir))
+  when 115 # s
+    tmptr.toggle_strong
+    tmptr.reflesh
   when 113 # q
     exit 0
   else

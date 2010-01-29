@@ -44,7 +44,7 @@ class Tmptr_slide
 end
 
 class Tmptr_window_core
-  attr_writer :lines, :infobar_proc
+  attr_writer :lines, :infobar_proc, :contents_color
   attr_reader :current_index, :init_x, :init_y, :font_size
 
   def initialize(content)
@@ -56,6 +56,7 @@ class Tmptr_window_core
     @font_size = 12
     @init_x = 2
     @init_y = 2
+    @contents_color = 30
     @infobar_proc = Proc.new{}
   end
 
@@ -106,6 +107,15 @@ class Tmptr_window_core
 
   def prev()
     view(@current_index - 1)
+  end
+
+  def toggle_strong()
+    if @standout == true
+      Curses.standend
+    else
+      Curses.standout
+    end
+    @standout = ! @standout
   end
 
   def start(&block)
