@@ -1,4 +1,4 @@
 Pango/Ruby
 -CairoからPNG
--PNGからPBM
--PBMからASCII
+-PNGからPNM
+-PNMからASCII
