@@ -12,6 +12,7 @@ TermPresenter is a presentation tool that works entirely inside a terminal. It c
 ```bash
 git clone https://github.com/ikegam/Termpresenter.git
 cd Termpresenter
+bundle install
 chmod +x ./bin/tmptr
 ./bin/tmptr -h
 ```
