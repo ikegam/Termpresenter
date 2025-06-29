@@ -12,12 +12,12 @@ TermPresenter is a presentation tool that works entirely inside a terminal. It c
 ```bash
 git clone https://github.com/ikegam/Termpresenter.git
 cd Termpresenter
-chmod +x ./tmptr
-./tmptr -h
+chmod +x ./bin/tmptr
+./bin/tmptr -h
 ```
 
 ## Usage
-Slides are stored as files inside the `presen/` directory. Run `./tmptr` to start the presentation. Use the following keys while running:
+Slides are stored as files inside the `presen/` directory. Run `./bin/tmptr` to start the presentation. Use the following keys while running:
 
 - `n` : next page
 - `p` : previous page
@@ -28,5 +28,5 @@ Slides are stored as files inside the `presen/` directory. Run `./tmptr` to star
 ## Directory layout
 - `presen/` – sample presentation files
 - `lib/` – application libraries
-- `tmptr` – launcher script
+- `bin/tmptr` – launcher script
 
