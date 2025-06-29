@@ -11,26 +11,25 @@ class String
     @aafont = "IPAGothic"
   end
 
-  def to_aa(height=12)
-    ret = ""
-    self.split(/\n/).each{|line|
-      surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, 400, height + (height/3).to_f)
+  def to_aa(height = 12)
+    each_line.reduce(+'') do |buf, line|
+      surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, 400, height + (height / 3.0))
       context = Cairo::Context.new(surface)
       context.set_source_rgb(1, 1, 1)
-      context.rectangle(0, 0, 400, height + (height/3).to_f)
+      context.rectangle(0, 0, 400, height + (height / 3.0))
       context.fill
       context = Cairo::Context.new(surface)
       layout = context.create_pango_layout
-      layout.text = line
+      layout.text = line.chomp
       layout.font_description = "#{@aafont} #{height}"
       layout.width = 400 * Pango::SCALE
       context.show_pango_layout(layout)
-      temp = Tempfile.new("termpresenter", "/tmp")
-      surface.write_to_png(temp.path)
-      ret = ret + %x{cat #{temp.path}| pngtopnm | ppmtopgm | pgmtopbm | pbmtoascii}
-      temp.close
-    }
-    return ret
+      Tempfile.open('termpresenter', '/tmp') do |temp|
+        surface.write_to_png(temp.path)
+        buf << %x{cat #{temp.path}| pngtopnm | ppmtopgm | pgmtopbm | pbmtoascii}
+      end
+      buf
+    end
   end
 
 end

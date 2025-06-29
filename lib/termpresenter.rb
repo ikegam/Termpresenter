@@ -17,27 +17,24 @@ class Tmptr_slide
     @tmptr.box_addstr(self.to_aa(@tmptr.font_size), @tmptr.init_x, @tmptr.init_y)
   end
 
-  def to_aa(font_size=12)
-    temp = Tempfile.new("termpresenter-image-buf")
-    temp.binmode
-    case @page_type
-    when :"text/plain"
-      return @page_raw_data.to_aa(font_size)
-    when :"image/png"
+  def to_aa(font_size = 12)
+    return @page_raw_data.to_aa(font_size) if @page_type == :"text/plain"
+
+    Tempfile.open("termpresenter-image-buf") do |temp|
+      temp.binmode
       temp.write(@page_raw_data)
       temp.close
-      return %x{cat #{temp.path}| pngtopnm | ppmtopgm | pgmtopbm | pbmtoascii}
-    when :"image/jpeg"
-      temp.write(@page_raw_data)
-      temp.close
-      return %x{cat #{temp.path}| jpegtopnm | ppmtopgm | pgmtopbm | pbmtoascii}
-    when :"image/gif"
-      temp.write(@page_raw_data)
-      temp.close
-      return %x{cat #{temp.path}| giftopnm | ppmtopgm | pgmtopbm | pbmtoascii}
-    else
-      p self if $DEBUG
-      return "nil"
+
+      cmd = case @page_type
+            when :"image/png"  then "pngtopnm"
+            when :"image/jpeg" then "jpegtopnm"
+            when :"image/gif"  then "giftopnm"
+            else
+              p self if $DEBUG
+              return "nil"
+            end
+
+      %x{cat #{temp.path} | #{cmd} | ppmtopgm | pgmtopbm | pbmtoascii}
     end
   end
 
@@ -93,12 +90,10 @@ class Tmptr_window_core
   end
 
   def box_addstr(str, x, y)
-    i = y
-    str.split("\n").each{|line|
+    str.each_line.with_index(y) do |line, i|
       @term.setpos(i, x)
-      @term.addstr(line[0, @real_cols-5])
-      i = i + 1
-    }
+      @term.addstr(line[0, @real_cols - 5])
+    end
   end
 
   def next()
@@ -109,30 +104,24 @@ class Tmptr_window_core
     view(@current_index - 1)
   end
 
-  def toggle_strong()
-    if @standout == true
-      Curses.standend
-    else
-      Curses.standout
-    end
-    @standout = ! @standout
+  def toggle_strong
+    @standout = !@standout
+    @standout ? Curses.standout : Curses.standend
   end
 
-  def start(&block)
+  def start
     view(0)
-    while true
-      block.call(@term, @term.getch)
-    end
+    loop { yield @term, @term.getch }
   end
 
   def calc_fontsize
     need_lines = 0
-    ret = 6
-    while  need_lines < @real_lines
-      need_lines = ("あ\n" * @lines.to_i).to_aa(ret).split(/\n/).size + 9
-      ret = ret + 1
+    size = 6
+    until need_lines >= @real_lines
+      need_lines = ("あ\n" * @lines.to_i).to_aa(size).split(/\n/).size + 9
+      size += 1
     end
-    return ret
+    size
   end
 
 end

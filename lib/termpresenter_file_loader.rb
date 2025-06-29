@@ -8,13 +8,12 @@ class Tmptr_raw_page
   attr_reader :type
 
   def initialize(file)
-    @type = MIME::Types.type_for(file)[0].to_s.to_sym
-    case @type
-    when :"text/plain"
-      @content = open(file).read
-    else
-      @content = open(file, "rb").read
-    end
+    @type = MIME::Types.type_for(file).first.to_s.to_sym
+    @content = if @type == :"text/plain"
+                 File.read(file)
+               else
+                 File.binread(file)
+               end
   end
 
 end
@@ -23,8 +22,11 @@ class Tmptr_content
   attr_reader :pages
 
   def self.new_bydir(dir)
-    files = Dir.entries(dir).sort.map{|x| File.expand_path(x, dir)}.select{|x| File.ftype(x) == "file"}
-    self.new(files)
+    files = Dir.entries(dir)
+               .sort
+               .map { |x| File.expand_path(x, dir) }
+               .select { |x| File.file?(x) }
+    new(files)
   end
 
   def initialize(files)
