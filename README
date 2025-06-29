@@ -30,8 +30,8 @@ Debianの場合
  # aptitude install coreutils ruby1.8 libpango1-ruby1.8 netpbm git-core
  $ git clone git://github.com/ikegam/Termpresenter.git
  $ cd Termpresenter/
- $ chmod +x ./tmptr
- $ ./tmptr
+ $ chmod +x ./bin/tmptr
+ $ ./bin/tmptr
 
 **コツ
 端末にセットするフォントはなるべく小さく、又端末の行間はなるべく少なめに設定した

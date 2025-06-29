@@ -11,8 +11,8 @@
 **installation and start
  $ git clone git://github.com/ikegam/Termpresenter.git
  $ cd Termpresenter/
- $ chmod +x ./tmptr
- $ ./tmptr
+ $ chmod +x ./bin/tmptr
+ $ ./bin/tmptr
 
 **dir
 -presen/

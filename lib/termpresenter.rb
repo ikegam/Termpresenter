@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'aastring.rb'
+require_relative 'aastring'
 require 'curses'
 
 class Tmptr_slide
@@ -198,7 +198,7 @@ class Tmptr_result_window < Tmptr_sub_window_core
 end
 
 if $0 == __FILE__
-  require 'termpresenter_file_loader.rb'
+  require_relative 'termpresenter_file_loader'
 
   content = Tmptr_content.new_bydir("../presen/")
   tmptr = Tmptr.new(content)
