@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require 'aastring.rb'
 require 'curses'
@@ -31,7 +31,7 @@ class Tmptr_slide
       temp.write(@page_raw_data)
       temp.close
       return %x{cat #{temp.path}| jpegtopnm | ppmtopgm | pgmtopbm | pbmtoascii}
-    when :"image/jpeg"
+    when :"image/gif"
       temp.write(@page_raw_data)
       temp.close
       return %x{cat #{temp.path}| giftopnm | ppmtopgm | pgmtopbm | pbmtoascii}
