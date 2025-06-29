@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 class Tmptr_raw_page
 
@@ -10,7 +10,7 @@ class Tmptr_raw_page
   def initialize(file)
     @type = MIME::Types.type_for(file)[0].to_s.to_sym
     case @type
-    when :"text/plane"
+    when :"text/plain"
       @content = open(file).read
     else
       @content = open(file, "rb").read
