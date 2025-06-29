@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.description   = "TermPresenter converts slides to ASCII art for terminal presentations."
   spec.authors       = ["ikegam"]
   spec.email         = ["example@example.com"]
-  spec.files         = Dir["lib/**/*", "bin/*", "presen/**/*", "README*"]
+  spec.files         = Dir["lib/**/*", "bin/*", "presen/**/*", "README.md"]
   spec.executables   = ["tmptr"]
   spec.bindir        = "bin"
   spec.required_ruby_version = ">= 2.5"
